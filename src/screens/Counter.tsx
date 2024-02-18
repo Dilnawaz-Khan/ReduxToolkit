@@ -54,6 +54,7 @@ const Counter = () => {
 
       <TextInput
         placeholder="Increment/Decrement by value"
+        placeholderTextColor={'gray'}
         style={styles.input}
         keyboardType="numeric"
         onChangeText={onValueChange}
@@ -122,6 +123,7 @@ const styles = StyleSheet.create({
     borderRadius: 7,
     borderWidth: StyleSheet.hairlineWidth,
     paddingHorizontal: 10,
+    color: COLORS.black,
   },
   developedByDill: {
     color: COLORS.grayLight + 70,
