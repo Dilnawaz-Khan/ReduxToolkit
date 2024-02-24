@@ -1,10 +1,10 @@
 import {Pressable, ScrollView, StyleSheet, Text, View} from 'react-native';
-import React, {useState} from 'react';
 import {useSelector} from 'react-redux';
-import {COLORS} from '../constants/Colors';
-import {AppRootState} from '../redux-toolkit/store/store';
 
-interface FilterButtons {
+import {AppRootState} from '../redux-toolkit/store/store';
+import {COLORS} from '../constants/Colors';
+
+interface FilterButtonsProps {
   selectedCategory: string;
   setSelectedCategory: (value: string) => void;
 }
@@ -12,11 +12,11 @@ interface FilterButtons {
 const FilterButtons = ({
   selectedCategory,
   setSelectedCategory,
-}: FilterButtons) => {
+}: FilterButtonsProps) => {
   const {categories} = useSelector((state: AppRootState) => state.todo);
   const categoriesList = ['All', ...categories];
 
-  const handleTabSelection = (selectedTab: any) => {
+  const handleTabSelection = (selectedTab: string) => {
     setSelectedCategory(selectedTab);
   };
 

@@ -29,10 +29,6 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.black,
     height: APPBAR_HEIGHT,
   },
-  content: {
-    flex: 1,
-    backgroundColor: '#33373B',
-  },
 });
 
 export default AppStatusBar;

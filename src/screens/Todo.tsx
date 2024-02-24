@@ -1,16 +1,15 @@
-import {useEffect, useState} from 'react';
-import {Dimensions, FlatList, StyleSheet, View} from 'react-native';
+import {Dimensions, FlatList, StyleSheet, Text, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-
-import FilterButtons from '../components/FilterButtons';
-import NoTodos from '../components/NoTodos';
-import TodoCard from '../components/TodoCard';
-import TodoForm from '../components/TodoForm';
-import TodoHeader from '../components/TodoHeader';
+import {AppRootState} from '../redux-toolkit/store/store';
 import {COLORS} from '../constants/Colors';
+import TodoHeader from '../components/TodoHeader';
+import TodoForm from '../components/TodoForm';
+import FilterButtons from '../components/FilterButtons';
+import {useEffect, useState} from 'react';
+import TodoCard from '../components/TodoCard';
 import {TodoItemInterface} from '../types';
 import {deleteTodo, updateTodo} from '../redux-toolkit/slices/todoSlice';
-import {AppRootState} from '../redux-toolkit/store/store';
+import NoTodos from '../components/NoTodos';
 
 const {width} = Dimensions.get('window');
 
@@ -23,27 +22,27 @@ const Todo = () => {
   const [editTodo, setEditTodo] = useState<string | null>(null);
 
   useEffect(() => {
-    if (todos.length === 0) return;
     if (todos.length > 0) setFilteredTodos(todos);
 
     if (selectedCategory !== 'All') {
-      let categoryTodos = todos.filter(
-        (todo: TodoItemInterface) => todo.category === selectedCategory,
+      const categoryTodos = todos.filter(
+        (item: TodoItemInterface) => item.category === selectedCategory,
       );
       setFilteredTodos(categoryTodos);
     } else {
       setFilteredTodos(todos);
     }
-  }, [selectedCategory, todos]);
+  }, [todos, selectedCategory]);
 
-  const handleOnEdit = (id: string) => setEditTodo(id);
+  const handleOnEdit = (id: string) => {
+    setEditTodo(id);
+  };
 
   const handleOnDelete = (id: string) => {
-    setFilteredTodos(prevState => prevState.filter(item => item.id !== id));
     dispatch(deleteTodo(id));
   };
 
-  const handleOnCompleted = (todoItem: TodoItemInterface) => {
+  const handleOnComplete = (todoItem: TodoItemInterface) => {
     const {isCompleted} = todoItem;
     dispatch(
       updateTodo({
@@ -70,7 +69,7 @@ const Todo = () => {
             item={item}
             handleOnEdit={handleOnEdit}
             handleOnDelete={handleOnDelete}
-            handleOnCompleted={handleOnCompleted}
+            handleOnComplete={handleOnComplete}
           />
         )}
         ListEmptyComponent={() => <NoTodos />}

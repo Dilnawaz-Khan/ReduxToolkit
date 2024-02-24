@@ -1,6 +1,5 @@
 import {StyleSheet, View} from 'react-native';
 import {Provider} from 'react-redux';
-
 import AppStatusBar from './src/components/AppStatusBar';
 import {COLORS} from './src/constants/Colors';
 import {store} from './src/redux-toolkit/store/store';

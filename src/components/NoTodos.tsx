@@ -1,5 +1,4 @@
 import {Image, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
 import {COLORS} from '../constants/Colors';
 
 const todoIcon = require('../assets/to-do-list.png');

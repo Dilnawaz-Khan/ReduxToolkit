@@ -1,30 +1,27 @@
 import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
 
-import {COLORS} from '../constants/Colors';
-import {useDispatch} from 'react-redux';
-import {deleteTodo, updateTodo} from '../redux-toolkit/slices/todoSlice';
-
 import {TodoItemInterface} from '../types';
+import {COLORS} from '../constants/Colors';
 
 const editIcon = require('../assets/edit.png');
 const deleteIcon = require('../assets/trash.png');
 
 interface TodoCardProps {
   item: TodoItemInterface;
-  handleOnEdit: (id: string) => void;
-  handleOnDelete: (id: string) => void;
-  handleOnCompleted: (item: TodoItemInterface) => void;
+  handleOnDelete: any;
+  handleOnEdit: any;
+  handleOnComplete: any;
 }
 
 const TodoCard = ({
   item,
-  handleOnEdit,
   handleOnDelete,
-  handleOnCompleted,
+  handleOnEdit,
+  handleOnComplete,
 }: TodoCardProps) => {
   const isCompleted = item.isCompleted;
 
-  const handleOnCompletedClick = () => handleOnCompleted(item);
+  const handleOnCompletedClick = () => handleOnComplete(item);
 
   const handleOnDeleteClick = () => handleOnDelete(item.id);
 
@@ -42,23 +39,15 @@ const TodoCard = ({
           },
         ]}
       />
-      <Text numberOfLines={2} style={styles.todoTxt}>
+      <Text style={styles.todoTxt} numberOfLines={2}>
         {item.todo}
       </Text>
       <View style={styles.editDeleteBtnContainer}>
         <Pressable onPress={handleOnEditClick}>
-          <Image
-            resizeMode="contain"
-            source={editIcon}
-            style={styles.editIcon}
-          />
+          <Image source={editIcon} style={styles.editIcon} />
         </Pressable>
         <Pressable onPress={handleOnDeleteClick}>
-          <Image
-            resizeMode="contain"
-            source={deleteIcon}
-            style={styles.deleteIcon}
-          />
+          <Image source={deleteIcon} style={styles.deleteIcon} />
         </Pressable>
       </View>
     </View>

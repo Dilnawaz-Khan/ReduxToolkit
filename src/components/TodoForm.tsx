@@ -6,23 +6,23 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import {useEffect, useState} from 'react';
-import {COLORS} from '../constants/Colors';
 import SelectDropdown from 'react-native-select-dropdown';
 
+import {COLORS} from '../constants/Colors';
 import {useDispatch, useSelector} from 'react-redux';
+import {AppRootState} from '../redux-toolkit/store/store';
+import {useEffect, useState} from 'react';
 import {addTodo, updateTodo} from '../redux-toolkit/slices/todoSlice';
 import {TodoItemInterface} from '../types';
-import {AppRootState} from '../redux-toolkit/store/store';
 
 const todoIcon = require('../assets/checklist.png');
 
-interface TodoForm {
+interface TodoFormProps {
   editTodo: string | null;
   setEditTodo: (value: string | null) => void;
 }
 
-const TodoForm = ({editTodo, setEditTodo}: TodoForm) => {
+const TodoForm = ({editTodo, setEditTodo}: TodoFormProps) => {
   const dispatch = useDispatch();
   const {todos, categories} = useSelector((state: AppRootState) => state.todo);
   const [selectedCategory, setSelectedCategory] = useState('Other');
@@ -40,19 +40,18 @@ const TodoForm = ({editTodo, setEditTodo}: TodoForm) => {
   }, [editTodo]);
 
   const handleAddTodo = () => {
-    if (todo)
-      if (editTodo !== null) {
+    if (todo) {
+      if (editTodo === null) dispatch(addTodo(todo, selectedCategory));
+      else
         dispatch(
           updateTodo({
-            id: editTodo,
+            id: toBeUpdate_todo.id,
             todo,
             category: selectedCategory,
             isCompleted: toBeUpdate_todo.isCompleted,
           }),
         );
-      } else {
-        dispatch(addTodo(todo, selectedCategory));
-      }
+    }
     setTodo('');
     setEditTodo(null);
   };
@@ -61,8 +60,6 @@ const TodoForm = ({editTodo, setEditTodo}: TodoForm) => {
     <View style={styles.container}>
       <View style={styles.todoFormContainer}>
         <TextInput
-          autoCorrect={false}
-          autoCapitalize={'none'}
           placeholder="Write your next task..."
           placeholderTextColor={COLORS.gray}
           style={styles.textInp}

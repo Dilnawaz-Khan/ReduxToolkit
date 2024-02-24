@@ -1,13 +1,12 @@
-import {createSlice, PayloadAction, nanoid} from '@reduxjs/toolkit';
-
-import {TodoItemInterface, TodoInitialState} from '../../types';
+import {PayloadAction, createSlice, nanoid} from '@reduxjs/toolkit';
+import {TodoInitialState, TodoItemInterface} from '../../types';
 
 const initialState: TodoInitialState = {
   todos: [],
   categories: ['Study', 'Work', 'Rest', 'Outing', 'Sports', 'Other'],
 };
 
-export const todoSlice = createSlice({
+const todoSlice = createSlice({
   name: 'todo',
   initialState,
   reducers: {

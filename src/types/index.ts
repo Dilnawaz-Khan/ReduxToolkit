@@ -1,1 +1,1 @@
-export * from './todo-intefaces';
+export * from './todo-interfaces';

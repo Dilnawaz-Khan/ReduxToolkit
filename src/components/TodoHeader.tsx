@@ -1,18 +1,21 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {COLORS} from '../constants/Colors';
 import {useSelector} from 'react-redux';
+import {AppRootState} from '../redux-toolkit/store/store';
+import {TodoItemInterface} from '../types';
 
 const TodoHeader = () => {
-  const {todos} = useSelector((state: any) => state.todo);
+  const {todos} = useSelector((state: AppRootState) => state.todo);
 
   const allTodos = todos.length;
-
-  const completedTodos = todos.filter((t: any) => t.isCompleted).length;
+  const completedTodos = todos.filter(
+    (todo: TodoItemInterface) => todo.isCompleted,
+  ).length;
 
   return (
     <View style={styles.container}>
-      <View style={styles.todoHeaderTxtContainer}>
+      <View style={styles.todoHeaderTextContainer}>
         <Text style={styles.todoDoneTxt}>Todo Done</Text>
         <Text style={styles.keepItUpTxt}>Keep it up</Text>
       </View>
@@ -38,6 +41,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 35,
   },
+  todoHeaderTextContainer: {
+    marginTop: 10,
+  },
   todoDoneTxt: {
     fontSize: 25,
     fontWeight: 'bold',
@@ -60,8 +66,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: COLORS.black,
     letterSpacing: 3,
-  },
-  todoHeaderTxtContainer: {
-    marginTop: 10,
   },
 });
