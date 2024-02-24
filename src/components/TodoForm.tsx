@@ -6,12 +6,14 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {COLORS} from '../constants/Colors';
 import SelectDropdown from 'react-native-select-dropdown';
 
 import {useDispatch, useSelector} from 'react-redux';
-import {Todo, addTodo, updateTodo} from '../redux-toolkit/slices/todoSlice';
+import {addTodo, updateTodo} from '../redux-toolkit/slices/todoSlice';
+import {TodoItemInterface} from '../types';
+import {AppRootState} from '../redux-toolkit/store/store';
 
 const todoIcon = require('../assets/checklist.png');
 
@@ -22,11 +24,13 @@ interface TodoForm {
 
 const TodoForm = ({editTodo, setEditTodo}: TodoForm) => {
   const dispatch = useDispatch();
-  const {todos, categories} = useSelector((state: any) => state.todo);
+  const {todos, categories} = useSelector((state: AppRootState) => state.todo);
   const [selectedCategory, setSelectedCategory] = useState('Other');
   const [todo, setTodo] = useState('');
 
-  const toBeUpdate_todo = todos.filter((item: Todo) => item.id === editTodo)[0];
+  const toBeUpdate_todo = todos.filter(
+    (item: TodoItemInterface) => item.id === editTodo,
+  )[0];
 
   useEffect(() => {
     if (editTodo !== null) {
@@ -49,8 +53,6 @@ const TodoForm = ({editTodo, setEditTodo}: TodoForm) => {
       } else {
         dispatch(addTodo(todo, selectedCategory));
       }
-
-    setSelectedCategory('Other');
     setTodo('');
     setEditTodo(null);
   };
