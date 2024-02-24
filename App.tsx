@@ -4,14 +4,14 @@ import {Provider} from 'react-redux';
 import AppStatusBar from './src/components/AppStatusBar';
 import {COLORS} from './src/constants/Colors';
 import {store} from './src/redux-toolkit/store/store';
-import Counter from './src/screens/Counter';
+import Todo from './src/screens/Todo';
 
 const App = () => {
   return (
     <Provider store={store}>
       <View style={styles.container}>
         <AppStatusBar backgroundColor={COLORS.black} barStyle="light-content" />
-        <Counter />
+        <Todo />
       </View>
     </Provider>
   );
