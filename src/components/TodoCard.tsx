@@ -1,35 +1,39 @@
 import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+
 import {COLORS} from '../constants/Colors';
 import {useDispatch} from 'react-redux';
 import {deleteTodo, updateTodo} from '../redux-toolkit/slices/todoSlice';
 
+import {TodoItemInterface} from '../types';
+
 const editIcon = require('../assets/edit.png');
 const deleteIcon = require('../assets/trash.png');
 
-const TodoCard = ({item, handleOnEdit}: any) => {
-  const dispatch = useDispatch();
+interface TodoCardProps {
+  item: TodoItemInterface;
+  handleOnEdit: (id: string) => void;
+  handleOnDelete: (id: string) => void;
+  handleOnCompleted: (item: TodoItemInterface) => void;
+}
+
+const TodoCard = ({
+  item,
+  handleOnEdit,
+  handleOnDelete,
+  handleOnCompleted,
+}: TodoCardProps) => {
   const isCompleted = item.isCompleted;
 
-  const handleOnCompleted = () => {
-    dispatch(
-      updateTodo({
-        ...item,
-        isCompleted: !item.isCompleted,
-      }),
-    );
-  };
+  const handleOnCompletedClick = () => handleOnCompleted(item);
 
-  const handleOnDelete = () => {
-    dispatch(deleteTodo(item.id));
-  };
+  const handleOnDeleteClick = () => handleOnDelete(item.id);
 
   const handleOnEditClick = () => handleOnEdit(item.id);
 
   return (
     <View style={styles.container}>
       <Pressable
-        onPress={handleOnCompleted}
+        onPress={handleOnCompletedClick}
         style={[
           styles.markCompleteBtn,
           {
@@ -49,7 +53,7 @@ const TodoCard = ({item, handleOnEdit}: any) => {
             style={styles.editIcon}
           />
         </Pressable>
-        <Pressable onPress={handleOnDelete}>
+        <Pressable onPress={handleOnDeleteClick}>
           <Image
             resizeMode="contain"
             source={deleteIcon}

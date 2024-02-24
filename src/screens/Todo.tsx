@@ -1,25 +1,24 @@
-import {
-  Dimensions,
-  FlatList,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
-import {COLORS} from '../constants/Colors';
-import {useSelector} from 'react-redux';
-import TodoHeader from '../components/TodoHeader';
-import FilterButtons from '../components/FilterButtons';
-import TodoForm from '../components/TodoForm';
 import {useEffect, useState} from 'react';
-import TodoCard from '../components/TodoCard';
+import {Dimensions, FlatList, StyleSheet, View} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
+
+import FilterButtons from '../components/FilterButtons';
 import NoTodos from '../components/NoTodos';
+import TodoCard from '../components/TodoCard';
+import TodoForm from '../components/TodoForm';
+import TodoHeader from '../components/TodoHeader';
+import {COLORS} from '../constants/Colors';
+import {TodoItemInterface} from '../types';
+import {deleteTodo, updateTodo} from '../redux-toolkit/slices/todoSlice';
+import {AppRootState} from '../redux-toolkit/store/store';
 
 const {width} = Dimensions.get('window');
 
 const Todo = () => {
-  const {todos} = useSelector((state: any) => state.todo);
-  const [filteredTodos, setFilteredTodos] = useState(todos);
+  const dispatch = useDispatch();
+  const {todos} = useSelector((state: AppRootState) => state.todo);
+  const [filteredTodos, setFilteredTodos] =
+    useState<TodoItemInterface[]>(todos);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [editTodo, setEditTodo] = useState<string | null>(null);
 
@@ -29,7 +28,7 @@ const Todo = () => {
 
     if (selectedCategory !== 'All') {
       let categoryTodos = todos.filter(
-        (todo: any) => todo.category === selectedCategory,
+        (todo: TodoItemInterface) => todo.category === selectedCategory,
       );
       setFilteredTodos(categoryTodos);
     } else {
@@ -39,6 +38,21 @@ const Todo = () => {
 
   const handleOnEdit = (id: string) => setEditTodo(id);
 
+  const handleOnDelete = (id: string) => {
+    setFilteredTodos(prevState => prevState.filter(item => item.id !== id));
+    dispatch(deleteTodo(id));
+  };
+
+  const handleOnCompleted = (todoItem: TodoItemInterface) => {
+    const {isCompleted} = todoItem;
+    dispatch(
+      updateTodo({
+        ...todoItem,
+        isCompleted: !isCompleted,
+      }),
+    );
+  };
+
   return (
     <View style={styles.container}>
       {todos.length > 0 && <TodoHeader />}
@@ -47,13 +61,17 @@ const Todo = () => {
         selectedCategory={selectedCategory}
         setSelectedCategory={setSelectedCategory}
       />
-
       <FlatList
         data={filteredTodos}
         keyExtractor={item => item.id}
         contentContainerStyle={{gap: 10}}
         renderItem={({item}) => (
-          <TodoCard item={item} handleOnEdit={handleOnEdit} />
+          <TodoCard
+            item={item}
+            handleOnEdit={handleOnEdit}
+            handleOnDelete={handleOnDelete}
+            handleOnCompleted={handleOnCompleted}
+          />
         )}
         ListEmptyComponent={() => <NoTodos />}
       />

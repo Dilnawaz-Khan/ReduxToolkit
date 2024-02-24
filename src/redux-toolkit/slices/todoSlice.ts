@@ -1,18 +1,8 @@
 import {createSlice, PayloadAction, nanoid} from '@reduxjs/toolkit';
 
-export interface Todo {
-  id: string;
-  todo: string;
-  category: string;
-  isCompleted: boolean;
-}
+import {TodoItemInterface, TodoInitialState} from '../../types';
 
-interface TodoState {
-  todos: Todo[];
-  categories: string[];
-}
-
-const initialState: TodoState = {
+const initialState: TodoInitialState = {
   todos: [],
   categories: ['Study', 'Work', 'Rest', 'Outing', 'Sports', 'Other'],
 };
@@ -22,7 +12,7 @@ export const todoSlice = createSlice({
   initialState,
   reducers: {
     addTodo: {
-      reducer: (state, action: PayloadAction<Todo>) => {
+      reducer: (state, action: PayloadAction<TodoItemInterface>) => {
         state.todos.push(action.payload);
       },
       prepare: (todo: string, category: string) => {
@@ -36,7 +26,7 @@ export const todoSlice = createSlice({
         };
       },
     },
-    updateTodo: (state, action: PayloadAction<Todo>) => {
+    updateTodo: (state, action: PayloadAction<TodoItemInterface>) => {
       const {id, todo, category, isCompleted} = action.payload;
       const existingTodoIndex = state.todos.findIndex(item => item.id === id);
       if (existingTodoIndex !== -1) {
